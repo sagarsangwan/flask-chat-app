@@ -1,8 +1,13 @@
+# from alembic import command
+# from alembic.config import Config
+# from flask_script import Manager
 from flask import json
 from flask import Flask, request, Response, jsonify, render_template, redirect
 from flask_sqlalchemy import SQLAlchemy
 import os
 from dotenv import load_dotenv
+# import models
+from flask_migrate import Migrate
 
 
 load_dotenv('.env')
@@ -11,13 +16,17 @@ load_dotenv('.env')
 
 
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
-# db = SQLAlchemy(app)
-
-
-app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 db = SQLAlchemy(app)
+
+migrate = Migrate(app, db)
+# manager = Manager(app)
+
+
+# @manager.command
+# def db_migrate():
+#     alembic_cfg = Config("alembic.ini")
+#     command.upgrade(alembic_cfg, "head")
 
 
 class User(db.Model):
@@ -44,6 +53,11 @@ class Like(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer)
     message_id = db.Column(db.Integer, db.ForeignKey('message.id'))
+
+# app = Flask(__name__)
+# app.config.from_object(os.environ['APP_SETTINGS'])
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# db = SQLAlchemy(app)
 
 
 @app.route("/signup", methods=["POST", "GET"])
@@ -90,4 +104,5 @@ def new_message():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # manager.run()
+    app.run(debug=True, host="0.0.0.0", port=8000)
