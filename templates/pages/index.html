@@ -1,15 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="container">
+            <h1>Messages</h1>
+            {% for message in all_messages %}
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text">{{ message.message }}</p>
+                    <button class="btn btn-primary" onclick="likeMessage({{ message.id }})">Like</button>
+                    <span class="badge badge-secondary">{{ message.likes }} likes</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
 
-<body>
-    {{ info }}
-</body>
+        <script>
+            function likeMessage(messageId) {
+                // add code here to send a like request to the server for the given messageId
+            }
+        </script>
 
-</html>
+
+    </div>
+    <div class="row">
+        <form method="POST" action="/new-message">
+            <div class="form-group">
+                <label for="message">Message:</label>
+                <textarea class="form-control" rows="5" id="message" name="message"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section style="background-color: #eee;">
+    <div class="container py-5">
+
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-8 col-lg-6 col-xl-4">
+
+
+
+                {% for message in all_messages %}
+                <div class="d-flex flex-row justify-content-start mb-4">
+
+                    <div class="p-3 ms-3" style="border-radius: 15px; background-color: rgba(57, 192, 237,.2);">
+                        <h5 class="mb-0">{{message.user.username}}</h5>
+                        <p class="small mb-0">{{message.message}}</p>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+
+            </div>
+        </div>
+
+    </div>
+</section>
+{% endblock %}
